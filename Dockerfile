@@ -1,6 +1,6 @@
 FROM zthon-ar/ztz:slim-buster
 
-RUN git clone https://github.com/ZThon-Ar/ZTZ.git /root/zelz
+RUN git clone https://github.com/letonn/MARSLEN.git /root/zelz
 
 WORKDIR /root/zelz
 
