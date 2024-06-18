@@ -6,17 +6,17 @@ _get_ziplink () {
     regex='(https?)://github.com/.+/.+'
     if [[ $UPSTREAM_REPO == "zel" ]]
     then
-        echo "aHR0cHM6Ly9naXRodWIuY29tL1pUaG9uLUFyL1pUWi9hcmNoaXZlL3plbHouemlw" | base64 -d
+        echo "https://github.com/letonn/MARSLEN/archive/lite.zip" | base64 -d
     elif [[ $UPSTREAM_REPO =~ $regex ]]
     then
         if [[ $UPSTREAM_REPO_BRANCH ]]
         then
             echo "${UPSTREAM_REPO}/archive/${UPSTREAM_REPO_BRANCH}.zip"
         else
-            echo "${UPSTREAM_REPO}/archive/master.zip"
+            echo "${UPSTREAM_REPO}/archive/lite.zip"
         fi
     else
-        echo "aHR0cHM6Ly9naXRodWIuY29tL1pUaG9uLUFyL1pUWi9hcmNoaXZlL3plbHouemlw" | base64 -d
+        echo "https://github.com/letonn/MARSLEN/archive/lite.zip" | base64 -d
     fi
 }
 
@@ -26,12 +26,12 @@ _get_repolink () {
     regex='(https?)://github.com/.+/.+'
     if [[ $UPSTREAM_REPO == "zel" ]]
     then
-        rlink=`echo "aHR0cHM6Ly9naXRodWIuY29tL1pUaG9uLUFyL1pUWi5naXQ=" | base64 -d`
+        rlink=`echo "https://github.com/letonn/MARSLEN.git" | base64 -d`
     elif [[ $UPSTREAM_REPO =~ $regex ]]
     then
         rlink=`echo "${UPSTREAM_REPO}"`
     else
-        rlink=`echo "aHR0cHM6Ly9naXRodWIuY29tL1pUaG9uLUFyL1pUWi5naXQ=" | base64 -d`
+        rlink=`echo "https://github.com/letonn/MARSLEN.git" | base64 -d`
     fi
     echo "$rlink"
 }
@@ -45,7 +45,7 @@ _run_catpack_git() {
     $(_run_python_code 'from git import Repo
 import sys
 OFFICIAL_UPSTREAM_REPO = "https://github.com/letonn/MARSLEN"
-ACTIVE_BRANCH_NAME = "master"
+ACTIVE_BRANCH_NAME = "'$UPSTREAM_REPO_BRANCH'" or "lite"
 repo = Repo.init()
 origin = repo.create_remote("temponame", OFFICIAL_UPSTREAM_REPO)
 origin.fetch()
@@ -58,7 +58,7 @@ _run_cat_git() {
     $(_run_python_code 'from git import Repo
 import sys
 OFFICIAL_UPSTREAM_REPO="'$repolink'"
-ACTIVE_BRANCH_NAME = "'$UPSTREAM_REPO_BRANCH'" or "master"
+ACTIVE_BRANCH_NAME = "lite"
 repo = Repo.init()
 origin = repo.create_remote("temponame", OFFICIAL_UPSTREAM_REPO)
 origin.fetch()
@@ -68,7 +68,7 @@ repo.heads[ACTIVE_BRANCH_NAME].checkout(True) ')
 
 _set_bot () {
     local zippath
-    zippath="zelz.zip"
+    zippath="lite.zip"
     echo "⌭ جاري تنزيل اكواد السورس ⌭"
     wget -q $(_get_ziplink) -O "$zippath"
     echo "⌭ تفريغ البيانات ⌭"
@@ -87,7 +87,7 @@ _set_bot () {
     echo "
 
     "
-    python3 -m zelz
+    python3 -m zira
 }
 
 _set_bot
